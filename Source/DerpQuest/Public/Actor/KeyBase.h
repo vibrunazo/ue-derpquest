@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Key.generated.h"
+#include "KeyBase.generated.h"
 
 UCLASS()
-class DERPQUEST_API AKey : public AActor
+class DERPQUEST_API AKeyBase : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AKey();
+	AKeyBase();
 
 protected:
 	// Called when the game starts or when spawned

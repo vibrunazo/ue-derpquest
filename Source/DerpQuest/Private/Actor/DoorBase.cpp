@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Actor/Key.h"
+#include "Actor/DoorBase.h"
 
 // Sets default values
-AKey::AKey()
+ADoorBase::ADoorBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,14 +12,14 @@ AKey::AKey()
 }
 
 // Called when the game starts or when spawned
-void AKey::BeginPlay()
+void ADoorBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AKey::Tick(float DeltaTime)
+void ADoorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

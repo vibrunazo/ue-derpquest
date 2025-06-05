@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Door.generated.h"
+#include "DoorBase.generated.h"
 
 UCLASS()
-class DERPQUEST_API ADoor : public AActor
+class DERPQUEST_API ADoorBase : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADoor();
+	ADoorBase();
 
 protected:
 	// Called when the game starts or when spawned
