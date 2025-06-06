@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DerpPlayerController.generated.h"
 
+struct FInputActionValue;
 class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
@@ -39,14 +40,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* SetDestinationTouchAction;
 
+	/** Directional Move Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* DirectionalMoveAction;
+
 	/** Set to true if we're using touch input */
 	uint32 bIsTouch : 1;
-
 	/** Saved location of the character movement destination */
 	FVector CachedDestination;
-
 	/** Time that the click input has been pressed */
 	float FollowTime = 0.0f;
+	/** True when directional movement input (WASD/gamepad) is being used */
+	bool bIsDirectionalMovementActive = false;
 
 public:
 
@@ -68,5 +73,7 @@ protected:
 	void OnSetDestinationReleased();
 	void OnTouchTriggered();
 	void OnTouchReleased();
+	void OnDirectionalMoveTriggered(const FInputActionValue& Value);
+	void OnDirectionalMoveReleased();
 	
 };

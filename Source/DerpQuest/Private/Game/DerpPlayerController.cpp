@@ -45,6 +45,10 @@ void ADerpPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &ADerpPlayerController::OnTouchTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ADerpPlayerController::OnTouchReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ADerpPlayerController::OnTouchReleased);
+
+		// Setup directional move input events
+		EnhancedInputComponent->BindAction(DirectionalMoveAction, ETriggerEvent::Triggered, this, &ADerpPlayerController::OnDirectionalMoveTriggered);
+		
 	}
 	else
 	{
@@ -117,4 +121,30 @@ void ADerpPlayerController::OnTouchReleased()
 {
 	bIsTouch = false;
 	OnSetDestinationReleased();
+}
+
+void ADerpPlayerController::OnDirectionalMoveTriggered(const FInputActionValue& Value)
+{
+	FVector2D MovementVector = Value.Get<FVector2D>();
+	bIsDirectionalMovementActive = !MovementVector.IsNearlyZero();
+	
+	APawn* ControlledPawn = GetPawn();
+	if (ControlledPawn != nullptr)
+	{
+		// Fixed world directions
+		const FVector ForwardDirection = FVector::ForwardVector;  // World X axis (forward)
+		const FVector RightDirection = FVector::RightVector;      // World Y axis (right)
+
+		// Calculate movement direction based on input
+		FVector MovementDirection = (ForwardDirection * MovementVector.Y) + (RightDirection * MovementVector.X);
+		MovementDirection.Normalize();
+		
+		ControlledPawn->AddMovementInput(MovementDirection, 1.0, false);
+	}
+}
+
+void ADerpPlayerController::OnDirectionalMoveReleased()
+{
+	bIsDirectionalMovementActive = false;
+	FollowTime = 0.f;
 }
