@@ -47,7 +47,10 @@ void ADerpPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ADerpPlayerController::OnTouchReleased);
 
 		// Setup directional move input events
+		EnhancedInputComponent->BindAction(DirectionalMoveAction, ETriggerEvent::Started, this, &ADerpPlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(DirectionalMoveAction, ETriggerEvent::Triggered, this, &ADerpPlayerController::OnDirectionalMoveTriggered);
+		EnhancedInputComponent->BindAction(DirectionalMoveAction, ETriggerEvent::Completed, this, &ADerpPlayerController::OnDirectionalMoveReleased);
+		EnhancedInputComponent->BindAction(DirectionalMoveAction, ETriggerEvent::Canceled, this, &ADerpPlayerController::OnDirectionalMoveReleased);
 		
 	}
 	else
@@ -68,6 +71,7 @@ void ADerpPlayerController::OnInputStarted()
 
 void ADerpPlayerController::OnSetDestinationTriggered()
 {
+	if (bIsDirectionalMovementActive) return;
 	// We flag that the input is being pressed
 	FollowTime += GetWorld()->GetDeltaSeconds();
 	
@@ -100,6 +104,7 @@ void ADerpPlayerController::OnSetDestinationTriggered()
 
 void ADerpPlayerController::OnSetDestinationReleased()
 {
+	if (bIsDirectionalMovementActive) return;
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
 	{
