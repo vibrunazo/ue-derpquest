@@ -6,6 +6,8 @@
 #include "DerpQuestPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 ADerpPlayerController::ADerpPlayerController()
 {
@@ -57,7 +59,6 @@ void ADerpPlayerController::BeginPlay()
 
 void ADerpPlayerController::OnInputStarted()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 6.0f, FColor::Yellow, FString::Printf(TEXT("Input started")));
 	StopMovement();
 }
 
@@ -95,12 +96,25 @@ void ADerpPlayerController::OnSetDestinationTriggered()
 
 void ADerpPlayerController::OnSetDestinationReleased()
 {
+	// If it was a short press
+	if (FollowTime <= ShortPressThreshold)
+	{
+		// We move there and spawn some particles
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
+	}
+
+	FollowTime = 0.f;
 }
 
 void ADerpPlayerController::OnTouchTriggered()
 {
+	bIsTouch = true;
+	OnSetDestinationTriggered();
 }
 
 void ADerpPlayerController::OnTouchReleased()
 {
+	bIsTouch = false;
+	OnSetDestinationReleased();
 }
