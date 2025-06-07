@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/ICanPickup.h"
 #include "DerpCharacter.generated.h"
 
 UCLASS()
-class DERPQUEST_API ADerpCharacter : public ACharacter
+class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup
 {
 	GENERATED_BODY()
 
