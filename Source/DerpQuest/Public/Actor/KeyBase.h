@@ -23,4 +23,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Speed at which the actor moves towards the target location
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key Movement")
+	float MoveSpeed = 5.0f;
+
+	// Target location to move towards
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key Movement")
+	FVector TargetLocation = FVector::ZeroVector;
+
+	// Offset from the target location
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key Movement")
+	FVector TargetOffset = FVector::ZeroVector;
+
+	// Actor to follow (if set, will override TargetLocation)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key Movement")
+	AActor* TargetActor = nullptr;
+
+private:
+	// Whether the actor should be moving towards the target location
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Key Movement")
+	bool bShouldMove = false;
+
 };
