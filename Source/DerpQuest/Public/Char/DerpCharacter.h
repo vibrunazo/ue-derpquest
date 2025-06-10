@@ -3,22 +3,54 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/ICanPickup.h"
 #include "DerpCharacter.generated.h"
 
+class UDerpAbilitySystemComponent;
+class UDerpGameplayAbility;
+
 UCLASS()
-class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup
+class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, public IAbilitySystemInterface 
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ADerpCharacter();
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	//~IAbilitySystemInterface
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	//~End IAbilitySystemInterface
+
+	// Grant abilities on the server. The Ability Specs will be replicated to the owning client.
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void GiveAbility(TSubclassOf<UDerpGameplayAbility> AbilityClass, int32 InputID = -1);
+
+	// Activate an ability by input ID
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void ActivateAbility(int32 InputID);
+
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Initialize the character's abilities
+	virtual void InitializeAbilities();
+
+	// The Ability System Component for this character
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UDerpAbilitySystemComponent> AbilitySystemComponent;
+
+	// Default abilities for this character. These will be granted on the server and replicated to the owning client.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
+	TArray<TSubclassOf<UDerpGameplayAbility>> DefaultAbilities;
 
 private:
 	/** Top down camera */
@@ -29,11 +61,5 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

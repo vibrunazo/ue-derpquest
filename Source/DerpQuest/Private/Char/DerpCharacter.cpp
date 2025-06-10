@@ -3,6 +3,7 @@
 
 #include "Char/DerpCharacter.h"
 
+#include "Abilities/DerpAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -37,6 +38,14 @@ ADerpCharacter::ADerpCharacter()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false;
 
+	// Create AbilitySystemComponent
+	AbilitySystemComponent = CreateDefaultSubobject<UDerpAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+    
+	// Set replication mode for the AbilitySystemComponent
+	// Mixed mode means only minimal gameplay effects are replicated to everyone, full gameplay effects only to the owner
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
 	
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	// PrimaryActorTick.bCanEverTick = true;
@@ -47,6 +56,21 @@ ADerpCharacter::ADerpCharacter()
 void ADerpCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	// Initialize the character's abilities
+	if (AbilitySystemComponent)
+	{
+		// Initialize the Ability System Component if it hasn't been initialized yet
+		if (!AbilitySystemComponent->bDefaultAbilitiesGiven)
+		{
+			InitializeAbilities();
+		}
+	}
+	
+}
+
+void ADerpCharacter::InitializeAbilities()
+{
 	
 }
 
@@ -62,5 +86,18 @@ void ADerpCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UAbilitySystemComponent* ADerpCharacter::GetAbilitySystemComponent() const
+{
+	return Cast<UDerpAbilitySystemComponent>(AbilitySystemComponent);
+}
+
+void ADerpCharacter::GiveAbility(TSubclassOf<UDerpGameplayAbility> AbilityClass, int32 InputID)
+{
+}
+
+void ADerpCharacter::ActivateAbility(int32 InputID)
+{
 }
 
