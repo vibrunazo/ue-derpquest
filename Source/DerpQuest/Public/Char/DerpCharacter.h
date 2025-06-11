@@ -9,7 +9,7 @@
 #include "DerpCharacter.generated.h"
 
 class UDerpAbilitySystemComponent;
-class UDerpGameplayAbility;
+class UDerpAbility;
 
 UCLASS()
 class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, public IAbilitySystemInterface 
@@ -30,7 +30,7 @@ public:
 
 	// Grant abilities on the server. The Ability Specs will be replicated to the owning client.
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
-	void GiveAbility(TSubclassOf<UDerpGameplayAbility> AbilityClass, int32 InputID = -1);
+	void GiveAbility(TSubclassOf<UDerpAbility> AbilityClass, int32 InputID = -1);
 
 	// Activate an ability by input ID
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
@@ -48,9 +48,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UDerpAbilitySystemComponent> AbilitySystemComponent;
 
-	// Default abilities for this character. These will be granted on the server and replicated to the owning client.
+	// Default active abilities for this character. Will be given an input ID equal to their index in the array.
+	// These will be granted on the server and replicated to the owning client.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
-	TArray<TSubclassOf<UDerpGameplayAbility>> DefaultAbilities;
+	TArray<TSubclassOf<UDerpAbility>> DefaultActiveAbilities;
 
 private:
 	/** Top down camera */

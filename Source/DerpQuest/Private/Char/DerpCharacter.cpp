@@ -3,6 +3,7 @@
 
 #include "Char/DerpCharacter.h"
 
+#include "Abilities/DerpAbility.h"
 #include "Abilities/DerpAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -71,7 +72,23 @@ void ADerpCharacter::BeginPlay()
 
 void ADerpCharacter::InitializeAbilities()
 {
-	
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
+	// Grant default abilities
+	int32 InputID = 0;
+	for (TSubclassOf<UDerpAbility>& Ability : DefaultActiveAbilities)
+	{
+		if (Ability)
+		{
+			GiveAbility(Ability, InputID++);
+		}
+	}
+
+	// Mark that we've given the default abilities
+	AbilitySystemComponent->bDefaultAbilitiesGiven = true;
 }
 
 // Called every frame
@@ -93,11 +110,34 @@ UAbilitySystemComponent* ADerpCharacter::GetAbilitySystemComponent() const
 	return Cast<UDerpAbilitySystemComponent>(AbilitySystemComponent);
 }
 
-void ADerpCharacter::GiveAbility(TSubclassOf<UDerpGameplayAbility> AbilityClass, int32 InputID)
+void ADerpCharacter::GiveAbility(TSubclassOf<UDerpAbility> AbilityClass, int32 InputID)
 {
+	if (!AbilitySystemComponent || !AbilityClass)
+	{
+		return;
+	}
+
+	// Create the ability spec
+	FGameplayAbilitySpec AbilitySpec(AbilityClass, 1);
+    
+	// If an input ID was provided, set it
+	if (InputID >= 0)
+	{
+		AbilitySpec.InputID = InputID;
+	}
+    
+	// Give the ability to the character
+	AbilitySystemComponent->GiveAbility(AbilitySpec);
 }
 
 void ADerpCharacter::ActivateAbility(int32 InputID)
 {
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
+	// Try to activate the ability by input ID
+	AbilitySystemComponent->AbilityLocalInputPressed(InputID);
 }
 
