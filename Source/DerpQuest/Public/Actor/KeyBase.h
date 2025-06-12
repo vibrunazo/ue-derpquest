@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PickupBase.h"
 #include "GameFramework/Actor.h"
 #include "KeyBase.generated.h"
 
 UCLASS()
-class DERPQUEST_API AKeyBase : public AActor
+class DERPQUEST_API AKeyBase : public APickupBase
 {
 	GENERATED_BODY()
 	

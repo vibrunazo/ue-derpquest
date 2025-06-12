@@ -17,6 +17,8 @@ void AKeyBase::BeginPlay()
 	Super::BeginPlay();
 
 	TargetLocation = GetActorLocation();
+	TargetLocation += FVector::UpVector * 50.0f;
+	
 }
 
 // Called every frame

@@ -30,4 +30,9 @@ public:
 	// Checks if the inventory has a key with the specified tag
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Inventory|Keys")
 	bool HasKey(const FGameplayTag& KeyTag) const;
+
+	// Adds a key with the specified tag to the inventory
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attributes")
+	void PickupMana(float Amount);
+
 };
