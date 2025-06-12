@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class DERPQUEST_API UDerpAbility : public UGameplayAbility
 {
 	GENERATED_BODY()

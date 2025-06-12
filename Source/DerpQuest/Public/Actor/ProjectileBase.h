@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interfaces/IGetHit.h"
-#include "DoorBase.generated.h"
+#include "Interfaces/ICanHit.h"
+#include "ProjectileBase.generated.h"
 
 UCLASS()
-class DERPQUEST_API ADoorBase : public AActor, public IIGetHit
+class DERPQUEST_API AProjectileBase : public AActor, public IICanHit 
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADoorBase();
+	AProjectileBase();
 
 protected:
 	// Called when the game starts or when spawned
