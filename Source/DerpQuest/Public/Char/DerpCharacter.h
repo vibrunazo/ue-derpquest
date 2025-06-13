@@ -41,6 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void ActivateAbility(int32 InputID);
 
+	virtual void ApplyPickupEffect_Implementation(TSubclassOf<UGameplayEffect> EffectToApply) override;
 	
 protected:
 	// Called when the game starts or when spawned

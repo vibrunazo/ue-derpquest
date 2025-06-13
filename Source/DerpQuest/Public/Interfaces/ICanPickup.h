@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "ICanPickup.generated.h"
 
+class UGameplayEffect;
 struct FGameplayTag;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, BlueprintType)
@@ -32,7 +33,11 @@ public:
 	bool HasKey(const FGameplayTag& KeyTag) const;
 
 	// Adds a key with the specified tag to the inventory
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attributes")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Abilities")
 	void PickupMana(float Amount);
+
+	// Applies a GameplayEffect to the actor
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Abilities")
+	void ApplyPickupEffect(TSubclassOf<UGameplayEffect> EffectToApply);
 
 };

@@ -9,7 +9,7 @@ UDerpAttributeSet::UDerpAttributeSet()
 	// Initialize attributes to default values
 	Health = 100.0f;
 	MaxHealth = 100.0f;
-	Mana = 100.0f;
+	Mana = 10.0f;
 	MaxMana = 100.0f;
 }
 
