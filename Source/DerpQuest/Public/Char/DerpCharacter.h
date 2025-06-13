@@ -8,6 +8,7 @@
 #include "Interfaces/ICanPickup.h"
 #include "DerpCharacter.generated.h"
 
+class UDerpAttributeSet;
 class UDerpAbilitySystemComponent;
 class UDerpAbility;
 
@@ -27,6 +28,10 @@ public:
 	//~IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~End IAbilitySystemInterface
+
+	// Get the Attribute Set
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	UDerpAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 	// Grant abilities on the server. The Ability Specs will be replicated to the owning client.
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
@@ -48,10 +53,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UDerpAbilitySystemComponent> AbilitySystemComponent;
 
+	// The Attribute Set for this character
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UDerpAttributeSet> AttributeSet;
+
 	// Default active abilities for this character. Will be given an input ID equal to their index in the array.
 	// These will be granted on the server and replicated to the owning client.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TArray<TSubclassOf<UDerpAbility>> DefaultActiveAbilities;
+
+	// Initialize the character's attributes
+	virtual void InitializeAttributes();
 
 private:
 	/** Top down camera */

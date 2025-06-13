@@ -5,6 +5,7 @@
 
 #include "Abilities/DerpAbility.h"
 #include "Abilities/DerpAbilitySystemComponent.h"
+#include "Abilities/DerpAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -47,9 +48,8 @@ ADerpCharacter::ADerpCharacter()
 	// Mixed mode means only minimal gameplay effects are replicated to everyone, full gameplay effects only to the owner
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	// PrimaryActorTick.bCanEverTick = true;
+	// Create the Attribute Set
+	AttributeSet = CreateDefaultSubobject<UDerpAttributeSet>(TEXT("AttributeSet"));
 
 }
 
@@ -61,6 +61,11 @@ void ADerpCharacter::BeginPlay()
 	// Initialize the character's abilities
 	if (AbilitySystemComponent)
 	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		
+		// Initialize attributes
+		InitializeAttributes();
+		
 		// Initialize the Ability System Component if it hasn't been initialized yet
 		if (!AbilitySystemComponent->bDefaultAbilitiesGiven)
 		{
@@ -76,6 +81,8 @@ void ADerpCharacter::InitializeAbilities()
 	{
 		return;
 	}
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent) return;
+
 
 	// Grant default abilities
 	int32 InputID = 0;
@@ -89,6 +96,13 @@ void ADerpCharacter::InitializeAbilities()
 
 	// Mark that we've given the default abilities
 	AbilitySystemComponent->bDefaultAbilitiesGiven = true;
+}
+
+void ADerpCharacter::InitializeAttributes()
+{
+	if (!AbilitySystemComponent || !AttributeSet) return;
+	
+
 }
 
 // Called every frame
