@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/ICanPickup.h"
+#include "Interfaces/IGetHit.h"
 #include "DerpCharacter.generated.h"
 
 class UDerpAttributeSet;
@@ -13,7 +14,7 @@ class UDerpAbilitySystemComponent;
 class UDerpAbility;
 
 UCLASS()
-class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, public IAbilitySystemInterface 
+class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, public IAbilitySystemInterface, public IIGetHit
 {
 	GENERATED_BODY()
 
