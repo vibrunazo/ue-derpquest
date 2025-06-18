@@ -3,15 +3,26 @@
 
 #include "Game/DerpGameMode.h"
 
+#include "Game/Data/LevelAssetUserData.h"
+
 ADerpGameMode::ADerpGameMode()
 {
-	TimeRemaining = TotalTime;
 }
 
 void ADerpGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	// Update every second
+	AWorldSettings* WorldSettings = GetWorld()->GetWorldSettings();
+	if (WorldSettings)
+	{
+		if (const ULevelAssetUserData* TimerData = WorldSettings->GetAssetUserData<ULevelAssetUserData>())
+		{
+			TimerDuration = TimerData->TimerDuration;
+		}
+	}
+
+	TimeRemaining = TimerDuration;
+	
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ADerpGameMode::UpdateTimer, 1.0f, true);
 }
 
@@ -26,7 +37,7 @@ void ADerpGameMode::UpdateTimer()
 	{
 		// Timer reached zero, restart level
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT("Time's up!"));
+		// UE_LOG(LogTemp, Warning, TEXT("Time's up!"));
 		// Uncomment to restart level when time runs out
 		// UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetName()));
 	}

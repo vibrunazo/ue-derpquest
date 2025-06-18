@@ -21,16 +21,17 @@ public:
 	void OnTimerUpdate(int32 NewTime);
 	
 	// Current time remaining
-	UPROPERTY(BlueprintReadOnly, Category = "Game")
+	UPROPERTY(BlueprintReadWrite, Category = "Game")
 	int32 TimeRemaining;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+	int32 TimerDuration = 60; // Default to 60 seconds
 	
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	// Total time in seconds
-	UPROPERTY(EditAnywhere, Category = "Game")
-	int32 TotalTime = 60; // Default to 60 seconds
 
 
 	FTimerHandle TimerHandle;
