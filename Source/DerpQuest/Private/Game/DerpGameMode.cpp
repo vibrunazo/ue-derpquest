@@ -12,8 +12,7 @@ ADerpGameMode::ADerpGameMode()
 void ADerpGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	AWorldSettings* WorldSettings = GetWorld()->GetWorldSettings();
-	if (WorldSettings)
+	if (AWorldSettings* WorldSettings = GetWorldSettings())
 	{
 		if (const ULevelAssetUserData* TimerData = WorldSettings->GetAssetUserData<ULevelAssetUserData>())
 		{
