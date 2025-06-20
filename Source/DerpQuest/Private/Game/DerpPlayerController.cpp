@@ -23,7 +23,6 @@ void ADerpPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	// set up gameplay key bindings
-	Super::SetupInputComponent();
 
 	// Add Input Mapping Context
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
