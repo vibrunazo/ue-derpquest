@@ -67,6 +67,15 @@ protected:
 	// Initialize the character's attributes
 	virtual void InitializeAttributes();
 
+	// Gameplay Effect to apply on startup to set initial attribute values
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
+	TSubclassOf<class UGameplayEffect> DefaultAttributes;
+
+	// Apply a gameplay effect to self
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Effect, float Level = 1.0f);
+
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

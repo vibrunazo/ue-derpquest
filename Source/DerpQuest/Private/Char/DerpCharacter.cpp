@@ -77,13 +77,14 @@ void ADerpCharacter::BeginPlay()
 
 void ADerpCharacter::InitializeAbilities()
 {
-	if (!AbilitySystemComponent)
+	if (!AbilitySystemComponent || !AttributeSet) return;
+	if (GetLocalRole() != ROLE_Authority) return;
+
+	if (DefaultAttributes)
 	{
-		return;
+		ApplyEffectToSelf(DefaultAttributes, 1.0f);
 	}
-	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent) return;
-
-
+	
 	// Grant default abilities
 	int32 InputID = 0;
 	for (TSubclassOf<UDerpAbility>& Ability : DefaultActiveAbilities)
@@ -103,6 +104,20 @@ void ADerpCharacter::InitializeAttributes()
 	if (!AbilitySystemComponent || !AttributeSet) return;
 	
 
+}
+
+void ADerpCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Effect, float Level)
+{
+	if (!AbilitySystemComponent || !Effect) return;
+
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(Effect, Level, EffectContext);
+	if (NewHandle.IsValid())
+	{
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
+	}
 }
 
 // Called every frame
@@ -158,17 +173,7 @@ void ADerpCharacter::ActivateAbility(int32 InputID)
 void ADerpCharacter::ApplyPickupEffect_Implementation(TSubclassOf<UGameplayEffect> EffectToApply)
 {
 	IICanPickup::ApplyPickupEffect_Implementation(EffectToApply);
-	if (AbilitySystemComponent && EffectToApply)
-	{
-		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-		EffectContext.AddSourceObject(this);
-        
-		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(EffectToApply, 1.0f, EffectContext);
-		if (NewHandle.IsValid())
-		{
-			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
-		}
-	}
+	ApplyEffectToSelf(EffectToApply, 1.0f);
 	
 }
 
