@@ -16,6 +16,9 @@ class DERPQUEST_API ADerpGameMode : public AGameModeBase
 public:
 	ADerpGameMode();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game")
+	TSubclassOf<APawn> DefaultCharClass;
+
 	// Called when the timer updates
 	UFUNCTION(BlueprintImplementableEvent, Category = "Game")
 	void OnTimerUpdate(int32 NewTime);
@@ -26,6 +29,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
 	int32 TimerDuration = 60; // Default to 60 seconds
+
 	
 protected:
 	virtual void BeginPlay() override;

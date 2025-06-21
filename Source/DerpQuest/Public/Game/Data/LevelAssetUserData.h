@@ -17,5 +17,9 @@ class DERPQUEST_API ULevelAssetUserData : public UAssetUserData
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
 	int32 TimerDuration = 60;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+	TSubclassOf<APawn> DefaultPawnClass;
+	
 	
 };

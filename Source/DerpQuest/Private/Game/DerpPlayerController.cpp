@@ -8,6 +8,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Char/DerpCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 ADerpPlayerController::ADerpPlayerController()
 {
@@ -61,11 +63,54 @@ void ADerpPlayerController::SetupInputComponent()
 void ADerpPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	// Select all player units at start
+	SelectAllPlayerUnits();
+}
+
+void ADerpPlayerController::SelectAllPlayerUnits()
+{
+	// Clear existing selection
+	ControlledUnits.Empty();
+
+	// Find all actors with the "Player" tag
+	TArray<AActor*> PlayerActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName(TEXT("Player")), PlayerActors);
+
+	// Add all found player characters to ControlledUnits
+	for (AActor* Actor : PlayerActors)
+	{
+		if (ADerpCharacter* PlayerCharacter = Cast<ADerpCharacter>(Actor))
+		{
+			ControlledUnits.Add(PlayerCharacter);
+		}
+	}
 }
 
 void ADerpPlayerController::OnInputStarted()
 {
-	StopMovement();
+	for (auto ControlledPawn : ControlledUnits)
+	{
+		if (ControlledPawn != nullptr and ControlledPawn->GetController() != nullptr)
+			ControlledPawn->GetController()->StopMovement();
+	}
+}
+
+void ADerpPlayerController::MovePawnTowardsDestination(APawn* ControlledPawn)
+{
+	if (ControlledPawn != nullptr)
+	{
+		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
+	}
+}
+
+void ADerpPlayerController::MovePawnToDestination(APawn* ControlledPawn)
+{
+	if (ControlledPawn != nullptr and ControlledPawn->GetController() != nullptr)
+	{
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(ControlledPawn->GetController(), CachedDestination);
+	}
 }
 
 void ADerpPlayerController::OnSetDestinationTriggered()
@@ -93,11 +138,9 @@ void ADerpPlayerController::OnSetDestinationTriggered()
 	}
 	
 	// Move towards mouse pointer or touch
-	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
+	for (auto ControlledPawn : ControlledUnits)
 	{
-		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
+		MovePawnTowardsDestination(ControlledPawn);
 	}
 }
 
@@ -108,7 +151,10 @@ void ADerpPlayerController::OnSetDestinationReleased()
 	if (FollowTime <= ShortPressThreshold)
 	{
 		// We move there and spawn some particles
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
+		for (auto ControlledPawn : ControlledUnits)
+		{
+			MovePawnToDestination(ControlledPawn);
+		}
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
 	}
 
@@ -132,17 +178,16 @@ void ADerpPlayerController::OnDirectionalMoveTriggered(const FInputActionValue& 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	bIsDirectionalMovementActive = !MovementVector.IsNearlyZero();
 	
-	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
-	{
-		// Fixed world directions
-		const FVector ForwardDirection = FVector::ForwardVector;  // World X axis (forward)
-		const FVector RightDirection = FVector::RightVector;      // World Y axis (right)
+	// Fixed world directions
+	const FVector ForwardDirection = FVector::ForwardVector;  // World X axis (forward)
+	const FVector RightDirection = FVector::RightVector;      // World Y axis (right)
 
-		// Calculate movement direction based on input
-		FVector MovementDirection = (ForwardDirection * MovementVector.Y) + (RightDirection * MovementVector.X);
-		MovementDirection.Normalize();
-		
+	// Calculate movement direction based on input
+	FVector MovementDirection = (ForwardDirection * MovementVector.Y) + (RightDirection * MovementVector.X);
+	MovementDirection.Normalize();
+
+	for (auto ControlledPawn : ControlledUnits)
+	{
 		ControlledPawn->AddMovementInput(MovementDirection, 1.0, false);
 	}
 }

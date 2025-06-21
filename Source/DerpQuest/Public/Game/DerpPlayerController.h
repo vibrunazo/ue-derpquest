@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DerpPlayerController.generated.h"
 
+class ADerpCharacter;
 struct FInputActionValue;
 class UNiagaraSystem;
 class UInputMappingContext;
@@ -52,11 +53,15 @@ protected:
 	float FollowTime = 0.0f;
 	/** True when directional movement input (WASD/gamepad) is being used */
 	bool bIsDirectionalMovementActive = false;
-
+	
 public:
 
 	/** Constructor */
 	ADerpPlayerController();
+
+	/** Currently controlled unit list */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input")
+	TArray<ADerpCharacter*> ControlledUnits;
 
 	
 protected:
@@ -67,6 +72,15 @@ protected:
 	/** Gameplay initialization */
 	virtual void BeginPlay();
 
+	/** Select all units with the "Player" tag */
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void SelectAllPlayerUnits();
+	
+	/** Move the given pawn towards the direction of the cached destination */
+	void MovePawnTowardsDestination(APawn* ControlledPawn);
+	/** Move the given pawn directly to the cached destination using pathfinding */
+	void MovePawnToDestination(APawn* ControlledPawn);
+	
 	/** Input handlers */
 	void OnInputStarted();
 	void OnSetDestinationTriggered();

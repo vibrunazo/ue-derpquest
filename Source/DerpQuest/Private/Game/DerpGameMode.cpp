@@ -7,20 +7,22 @@
 
 ADerpGameMode::ADerpGameMode()
 {
-	if (AWorldSettings* WorldSettings = GetWorldSettings())
-	{
-		if (const ULevelAssetUserData* TimerData = WorldSettings->GetAssetUserData<ULevelAssetUserData>())
-		{
-			TimerDuration = TimerData->TimerDuration;
-		}
-	}
-
 	TimeRemaining = TimerDuration;
 }
 
 void ADerpGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (AWorldSettings* WorldSettings = GetWorldSettings())
+	{
+		if (const ULevelAssetUserData* LevelData = WorldSettings->GetAssetUserData<ULevelAssetUserData>())
+		{
+			TimerDuration = LevelData->TimerDuration;
+		}
+	}
+
+	TimeRemaining = TimerDuration;
 	
 	
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ADerpGameMode::UpdateTimer, 1.0f, true);
