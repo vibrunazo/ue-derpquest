@@ -3,6 +3,8 @@
 
 #include "Char/DerpPlayerPawn.h"
 
+#include "Actor/Components/DerpSpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Char/DerpCharacter.h"
 #include "Game/DerpPlayerController.h"
 
@@ -11,6 +13,24 @@ ADerpPlayerPawn::ADerpPlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Create and set up the root component
+	USceneComponent* SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	RootComponent = SceneRoot;
+
+	// Create the camera boom component
+	CameraBoom = CreateDefaultSubobject<UDerpSpringArmComponent>(TEXT("CameraBoom"));
+
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetUsingAbsoluteRotation(true);
+	CameraBoom->TargetArmLength = 2000.f;
+	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
+	CameraBoom->bDoCollisionTest = false;
+
+	// Create the camera component
+	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+
+	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
 }
 
