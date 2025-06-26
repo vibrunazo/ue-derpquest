@@ -5,14 +5,19 @@
 
 #include "AbilitySystemInterface.h"
 #include "Abilities/DerpAttributeSet.h"
+#include "Char/DerpCharacter.h"
+#include "Game/DerpPlayerController.h"
 
 void UDerpUserWidget::BindToPlayerAttributes()
 {
 	// Get the owning player
 	APlayerController* PC = GetOwningPlayer();
 	if (!PC) return;
+	ADerpPlayerController* DerpController = Cast<ADerpPlayerController>(PC);
+	if (!DerpController) return;
 	// Get the controlled pawn
-	APawn* Pawn = PC->GetPawn();
+	APawn* Pawn = DerpController->ControlledUnits[0];
+	// APawn* Pawn = PC->GetPawn();
 	if (!Pawn) return;
 	// Check if the pawn implements IAbilitySystemInterface
 	IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(Pawn);
