@@ -76,6 +76,11 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Effect, float Level = 1.0f);
 
 
+public:
+	// Cancel all active abilities
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void CancelAbilities();
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

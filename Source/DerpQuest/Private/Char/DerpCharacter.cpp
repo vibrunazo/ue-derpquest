@@ -177,3 +177,10 @@ void ADerpCharacter::ApplyPickupEffect_Implementation(TSubclassOf<UGameplayEffec
 	
 }
 
+void ADerpCharacter::CancelAbilities()
+{
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->CancelAllAbilities();
+	}
+}
