@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 // Sets default values
 ADerpCharacter::ADerpCharacter()
@@ -39,6 +40,8 @@ ADerpCharacter::ADerpCharacter()
 
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false;
+
+	StimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSourceComponent"));
 
 	// Create AbilitySystemComponent
 	AbilitySystemComponent = CreateDefaultSubobject<UDerpAbilitySystemComponent>(TEXT("AbilitySystemComponent"));

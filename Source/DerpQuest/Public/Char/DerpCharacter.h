@@ -9,6 +9,7 @@
 #include "Interfaces/IGetHit.h"
 #include "DerpCharacter.generated.h"
 
+class UAIPerceptionStimuliSourceComponent;
 class UDerpAttributeSet;
 class UDerpAbilitySystemComponent;
 class UDerpAbility;
@@ -89,6 +90,9 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	UAIPerceptionStimuliSourceComponent* StimuliSourceComponent;
 
 
 };
