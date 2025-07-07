@@ -49,7 +49,7 @@ void ADerpPlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (TargetChar)
+	if (TargetChar && bShouldFollow)
 	{
 		FVector CurrentLocation = GetActorLocation();
 		FVector TargetLocation = TargetChar->GetActorLocation();

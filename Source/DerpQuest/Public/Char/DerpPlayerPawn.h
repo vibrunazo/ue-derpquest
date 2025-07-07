@@ -17,11 +17,14 @@ public:
 	// Sets default values for this pawn's properties
 	ADerpPlayerPawn();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Pawn")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow")
     TObjectPtr<ADerpCharacter> TargetChar;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Pawn", meta = (ClampMin = "0.0", UIMin = "0.0"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow", meta = (ClampMin = "0.0", UIMin = "0.0"))
     float LerpSpeed = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow")
+	bool bShouldFollow = true;
 
 protected:
 	// Called when the game starts or when spawned

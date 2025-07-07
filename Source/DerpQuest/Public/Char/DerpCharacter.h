@@ -44,6 +44,10 @@ public:
 	void ActivateAbility(int32 InputID);
 
 	virtual void ApplyPickupEffect_Implementation(TSubclassOf<UGameplayEffect> EffectToApply) override;
+
+	// Target Character used for abilities and AI
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Abilities")
+	TObjectPtr<ADerpCharacter> TargetChar;
 	
 protected:
 	// Called when the game starts or when spawned
