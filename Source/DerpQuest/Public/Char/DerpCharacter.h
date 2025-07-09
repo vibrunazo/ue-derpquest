@@ -14,6 +14,8 @@ class UDerpAttributeSet;
 class UDerpAbilitySystemComponent;
 class UDerpAbility;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDiedSignature, class ADerpCharacter*, DiedCharacter);
+
 UCLASS()
 class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, public IAbilitySystemInterface, public IIGetHit
 {
@@ -21,6 +23,11 @@ class DERPQUEST_API ADerpCharacter : public ACharacter, public IICanPickup, publ
 
 public:
 	ADerpCharacter();
+
+	/** Called when this character dies. Passes a reference to itself. */
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Events")
+	FOnCharacterDiedSignature OnDied;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
