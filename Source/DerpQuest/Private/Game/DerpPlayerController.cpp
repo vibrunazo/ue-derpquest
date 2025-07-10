@@ -100,6 +100,7 @@ void ADerpPlayerController::MovePawnTowardsDestination(APawn* ControlledPawn)
 {
 	if (ControlledPawn != nullptr)
 	{
+		if (!ControlledPawn->InputEnabled()) return;
 		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
 	}
@@ -109,6 +110,7 @@ void ADerpPlayerController::MovePawnToDestination(APawn* ControlledPawn)
 {
 	if (ControlledPawn != nullptr and ControlledPawn->GetController() != nullptr)
 	{
+		if (!ControlledPawn->InputEnabled()) return;
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(ControlledPawn->GetController(), CachedDestination);
 	}
 }
@@ -188,6 +190,7 @@ void ADerpPlayerController::OnDirectionalMoveTriggered(const FInputActionValue& 
 
 	for (auto ControlledPawn : ControlledUnits)
 	{
+		if (!ControlledPawn->InputEnabled()) continue;
 		ControlledPawn->AddMovementInput(MovementDirection, 1.0, false);
 	}
 }

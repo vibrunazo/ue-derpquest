@@ -55,6 +55,10 @@ public:
 	// Target Character used for abilities and AI
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TObjectPtr<ADerpCharacter> TargetChar;
+
+	// Whether the Character is ready to use abilities
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Abilities")
+	bool bIsReady = true;
 	
 protected:
 	// Called when the game starts or when spawned
