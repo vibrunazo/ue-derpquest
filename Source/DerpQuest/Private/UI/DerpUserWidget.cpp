@@ -16,6 +16,11 @@ void UDerpUserWidget::BindToPlayerAttributes()
 	ADerpPlayerController* DerpController = Cast<ADerpPlayerController>(PC);
 	if (!DerpController) return;
 	// Get the controlled pawn
+	if (DerpController->ControlledUnits.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UI_ManaBar: ControlledUnits array is empty. Cannot bind attributes yet."));
+		return;
+	}
 	APawn* Pawn = DerpController->ControlledUnits[0];
 	// APawn* Pawn = PC->GetPawn();
 	if (!Pawn) return;

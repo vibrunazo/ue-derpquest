@@ -40,7 +40,8 @@ void ADerpPlayerPawn::BeginPlay()
 	Super::BeginPlay();
 
 	if (auto DerpController = Cast<ADerpPlayerController>(GetController()))
-		TargetChar = DerpController->ControlledUnits[0];
+		if (DerpController->ControlledUnits.Num() > 0)
+			TargetChar = DerpController->ControlledUnits[0];
 	
 }
 
