@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <init>
+        <log text="UPL: Injecting AGI meta-data tag."/>
+    </init>
+    <androidManifestUpdates>
+        <addElements tag="application">
+            <meta-data android:name="com.android.graphics.inject.gapid.v1" android:value="true" />
+        </addElements>
+    </androidManifestUpdates>
+</root>
