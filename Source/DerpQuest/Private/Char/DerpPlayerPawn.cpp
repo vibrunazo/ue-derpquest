@@ -39,9 +39,9 @@ void ADerpPlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (auto DerpController = Cast<ADerpPlayerController>(GetController()))
-		if (DerpController->ControlledUnits.Num() > 0)
-			TargetChar = DerpController->ControlledUnits[0];
+	// if (auto DerpController = Cast<ADerpPlayerController>(GetController()))
+	// 	if (DerpController->ControlledUnits.Num() > 0)
+	// 		TargetChar = DerpController->ControlledUnits[0];
 	
 }
 
@@ -63,6 +63,12 @@ void ADerpPlayerPawn::Tick(float DeltaTime)
 		);
         
 		SetActorLocation(NewLocation);
+	}
+	else
+	{
+		if (auto DerpController = Cast<ADerpPlayerController>(GetController()))
+			if (DerpController->ControlledUnits.Num() > 0)
+				TargetChar = DerpController->ControlledUnits[0];
 	}
 
 }
