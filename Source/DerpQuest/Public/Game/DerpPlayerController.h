@@ -12,6 +12,8 @@ class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnControlledUnitsChanged);
+
 /**
  * 
  */
@@ -53,8 +55,11 @@ protected:
 	float FollowTime = 0.0f;
 	/** True when directional movement input (WASD/gamepad) is being used */
 	bool bIsDirectionalMovementActive = false;
-	
+
 public:
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnControlledUnitsChanged OnControlledUnitsChanged;
 
 	/** Constructor */
 	ADerpPlayerController();

@@ -8,6 +8,13 @@
 #include "DerpUserWidget.generated.h"
 
 
+UENUM(BlueprintType)
+enum class EValidity : uint8
+{
+	Valid,
+	Invalid
+};
+
 /**
  * 
  */
@@ -17,6 +24,10 @@ class DERPQUEST_API UDerpUserWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+
+	UFUNCTION(BlueprintCallable, Category = "Player", meta = (ExpandEnumAsExecs = "Result"))
+	void GetDerpPlayerController(EValidity& Result, ADerpPlayerController*& PlayerController);
+
 	UFUNCTION(BlueprintCallable, Category = "GAS")
 	void BindToPlayerAttributes();
 	

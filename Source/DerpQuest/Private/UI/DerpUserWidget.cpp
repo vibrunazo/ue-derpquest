@@ -8,6 +8,19 @@
 #include "Char/DerpCharacter.h"
 #include "Game/DerpPlayerController.h"
 
+void UDerpUserWidget::GetDerpPlayerController(EValidity& Result, ADerpPlayerController*& PlayerController)
+{
+	PlayerController = Cast<ADerpPlayerController>(GetOwningPlayer());
+	if (PlayerController)
+	{
+		Result = EValidity::Valid;
+	}
+	else
+	{
+		Result = EValidity::Invalid;
+	}
+}
+
 void UDerpUserWidget::BindToPlayerAttributes()
 {
 	// Get the owning player

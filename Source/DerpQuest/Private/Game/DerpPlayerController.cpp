@@ -85,6 +85,8 @@ void ADerpPlayerController::SelectAllPlayerUnits()
 			ControlledUnits.Add(PlayerCharacter);
 		}
 	}
+
+	OnControlledUnitsChanged.Broadcast();
 }
 
 void ADerpPlayerController::OnInputStarted()
